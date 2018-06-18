@@ -1,21 +1,52 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Counter from './Counter'
 import './App.css';
 
-class App extends Component {
+export default class App extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      counters: [{ counterValue: 0 }, { counterValue: 0 }, { counterValue: 0 }, { counterValue: 0 }]
+    }
+  }
+
+  _addToAll = () => {
+    const newCounters = this.state.counters.map((counter) => {
+      return {
+        counterValue: counter.counterValue + 1
+      }
+    })
+    this.setState({ counters: newCounters })
+  }
+
+  _alterCounterValue = (value, i) => {
+    const newCounter = this.state.counters.map((counter, index) => {
+      if (i === index) {
+        return {
+          counterValue: counter.counterValue + value
+        }
+      } return counter
+    })
+    this.setState({ counters: newCounter })
+  }
+
   render() {
+    const { counters } = this.state
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        {counters.map((counter, index) => {
+          return (
+            <Counter
+              key={index}
+              index={index}
+              value={counter.counterValue}
+              newValue={this._alterCounterValue}
+            />
+          )
+        })}
+        <button onClick={() => { this._addToAll() }}>Add To All</button>
       </div>
     );
   }
 }
-
-export default App;
